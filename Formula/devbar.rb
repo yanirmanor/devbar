@@ -1,8 +1,8 @@
 class Devbar < Formula
   desc "macOS menu bar app that monitors local dev servers"
   homepage "https://github.com/yanirmanor/devbar"
-  url "https://github.com/yanirmanor/devbar/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "b4e96b7e14e81fc2b70ade6386da851629b0d27607a11bdda367ef51fc5bf33b"
+  url "https://github.com/yanirmanor/devbar/archive/refs/tags/v1.2.0.tar.gz"
+  sha256 "92d03e4cd46ae5e55ff95ef100124a3c124b429747b22559f6205b2a85c1e909"
   license "MIT"
 
   depends_on xcode: ["14.0", :build]
@@ -18,6 +18,7 @@ class Devbar < Formula
     (app_dir/"Resources").mkpath
     cp buildpath/"assets/Info.plist", app_dir/"Info.plist"
     cp ".build/release/DevBar", app_dir/"MacOS/DevBar"
+    cp buildpath/"assets/AppIcon.icns", app_dir/"Resources/AppIcon.icns" if (buildpath/"assets/AppIcon.icns").exist?
   end
 
   def post_install

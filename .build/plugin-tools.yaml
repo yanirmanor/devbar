@@ -1,0 +1,81 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "DevBar-arm64-apple-macosx15.0-debug.exe": ["<DevBar-arm64-apple-macosx15.0-debug.exe>"]
+  "DevBar-arm64-apple-macosx15.0-debug.module": ["<DevBar-arm64-apple-macosx15.0-debug.module>"]
+  "PackageStructure": ["<PackageStructure>"]
+  "main": ["<DevBar-arm64-apple-macosx15.0-debug.exe>","<DevBar-arm64-apple-macosx15.0-debug.module>"]
+  "test": ["<DevBar-arm64-apple-macosx15.0-debug.exe>","<DevBar-arm64-apple-macosx15.0-debug.module>"]
+default: "main"
+nodes:
+  "/Users/yanirmanor/yanir/devbar/Sources/DevBar/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar":
+    is-mutated: true
+commands:
+  "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar-entitlement.plist":
+    tool: write-auxiliary-file
+    inputs: ["<entitlement-plist>","<com.apple.security.get-task-allow>"]
+    outputs: ["/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar-entitlement.plist"]
+    description: "Write auxiliary file /Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar-entitlement.plist"
+
+  "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/yanirmanor/yanir/devbar/Sources/DevBar/DevServer.swift","/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerListView.swift","/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerRowView.swift","/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerScanner.swift","/Users/yanirmanor/yanir/devbar/Sources/DevBar/main.swift"]
+    outputs: ["/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/sources"]
+    description: "Write auxiliary file /Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/sources"
+
+  "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main.swift.o"]
+    outputs: ["/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.product/Objects.LinkFileList"
+
+  "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"]
+    outputs: ["/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+
+  "<DevBar-arm64-apple-macosx15.0-debug.exe>":
+    tool: phony
+    inputs: ["<DevBar-arm64-apple-macosx15.0-debug.exe-CodeSigning>"]
+    outputs: ["<DevBar-arm64-apple-macosx15.0-debug.exe>"]
+
+  "<DevBar-arm64-apple-macosx15.0-debug.module>":
+    tool: phony
+    inputs: ["/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/Modules/DevBar.swiftmodule"]
+    outputs: ["<DevBar-arm64-apple-macosx15.0-debug.module>"]
+
+  "C.DevBar-arm64-apple-macosx15.0-debug.exe":
+    tool: shell
+    inputs: ["/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.product/Objects.LinkFileList"]
+    outputs: ["/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar"]
+    description: "Linking ./.build/arm64-apple-macosx/debug/DevBar"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-L","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug","-o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar","-module-name","DevBar","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-alias","-Xlinker","_DevBar_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx13.0","-Xlinker","-add_ast_path","-Xlinker","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/Modules/DevBar.swiftmodule","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g"]
+
+  "C.DevBar-arm64-apple-macosx15.0-debug.exe-entitlements":
+    tool: shell
+    inputs: ["/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar-entitlement.plist"]
+    outputs: ["<DevBar-arm64-apple-macosx15.0-debug.exe-CodeSigning>"]
+    description: "Applying debug entitlements to ./.build/arm64-apple-macosx/debug/DevBar"
+    args: ["codesign","--force","--sign","-","--entitlements","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar-entitlement.plist","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar"]
+
+  "C.DevBar-arm64-apple-macosx15.0-debug.module":
+    tool: shell
+    inputs: ["/Users/yanirmanor/yanir/devbar/Sources/DevBar/DevServer.swift","/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerListView.swift","/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerRowView.swift","/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerScanner.swift","/Users/yanirmanor/yanir/devbar/Sources/DevBar/main.swift","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/sources"]
+    outputs: ["/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main.swift.o","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/Modules/DevBar.swiftmodule"]
+    description: "Compiling Swift Module 'DevBar' (5 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","DevBar","-emit-dependencies","-emit-module","-emit-module-path","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/Modules/DevBar.swiftmodule","-output-file-map","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/output-file-map.json","-incremental","-c","@/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/sources","-I","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx13.0","-incremental","-enable-batch-mode","-serialize-diagnostics","-index-store-path","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j14","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","DevBar_main","-swift-version","5","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks","-Xcc","-fPIC","-Xcc","-g","-package-name","devbar"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/yanirmanor/yanir/devbar/Sources/DevBar/","/Users/yanirmanor/yanir/devbar/Package.swift","/Users/yanirmanor/yanir/devbar/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

@@ -1,0 +1,40 @@
+{
+  "": {
+    "swift-dependencies": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/master.swiftdeps"
+  },
+  "/Users/yanirmanor/yanir/devbar/Sources/DevBar/DevServer.swift": {
+    "dependencies": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer.d",
+    "object": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer.swift.o",
+    "swiftmodule": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer~partial.swiftmodule",
+    "swift-dependencies": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer.swiftdeps",
+    "diagnostics": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer.dia"
+  },
+  "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerListView.swift": {
+    "dependencies": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView.d",
+    "object": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView.swift.o",
+    "swiftmodule": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView~partial.swiftmodule",
+    "swift-dependencies": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView.swiftdeps",
+    "diagnostics": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView.dia"
+  },
+  "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerRowView.swift": {
+    "dependencies": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView.d",
+    "object": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView.swift.o",
+    "swiftmodule": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView~partial.swiftmodule",
+    "swift-dependencies": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView.swiftdeps",
+    "diagnostics": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView.dia"
+  },
+  "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerScanner.swift": {
+    "dependencies": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner.d",
+    "object": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner.swift.o",
+    "swiftmodule": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner~partial.swiftmodule",
+    "swift-dependencies": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner.swiftdeps",
+    "diagnostics": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner.dia"
+  },
+  "/Users/yanirmanor/yanir/devbar/Sources/DevBar/main.swift": {
+    "dependencies": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main.d",
+    "object": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main.swift.o",
+    "swiftmodule": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main.swiftdeps",
+    "diagnostics": "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main.dia"
+  }
+}

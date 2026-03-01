@@ -1,0 +1,339 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.DevBar-arm64-apple-macosx15.0-debug.module" : {
+      "executable" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "fileList" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/sources",
+      "importPath" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/Sources/DevBar/DevServer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerListView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerRowView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerScanner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/Sources/DevBar/main.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "DevBar",
+      "moduleOutputPath" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/Modules/DevBar.swiftmodule",
+      "objects" : [
+        "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer.swift.o",
+        "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView.swift.o",
+        "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView.swift.o",
+        "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner.swift.o",
+        "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j14",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "DevBar_main",
+        "-swift-version",
+        "5",
+        "-plugin-path",
+        "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-F",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-I",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-L",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+        "-Xcc",
+        "-F",
+        "-Xcc",
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "devbar"
+      ],
+      "outputFileMapPath" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/Modules/DevBar.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/yanirmanor/yanir/devbar/Sources/DevBar/DevServer.swift",
+        "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerListView.swift",
+        "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerRowView.swift",
+        "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerScanner.swift",
+        "/Users/yanirmanor/yanir/devbar/Sources/DevBar/main.swift"
+      ],
+      "tempsPath" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "DevBar" : [
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
+      "-module-name",
+      "DevBar",
+      "-package-name",
+      "devbar",
+      "-c",
+      "/Users/yanirmanor/yanir/devbar/Sources/DevBar/DevServer.swift",
+      "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerListView.swift",
+      "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerRowView.swift",
+      "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerScanner.swift",
+      "/Users/yanirmanor/yanir/devbar/Sources/DevBar/main.swift",
+      "-I",
+      "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j14",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "DevBar_main",
+      "-swift-version",
+      "5",
+      "-plugin-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-F",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-I",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-L",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+      "-Xcc",
+      "-F",
+      "-Xcc",
+      "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/PrivateFrameworks",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "devbar",
+      "-driver-use-frontend-path",
+      "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "DevBar" : [
+
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar-entitlement.plist" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<entitlement-plist>"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<com.apple.security.get-task-allow>"
+        }
+      ],
+      "outputFilePath" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar-entitlement.plist"
+    },
+    "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/Sources/DevBar/DevServer.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerListView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerRowView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/Sources/DevBar/ServerScanner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/Sources/DevBar/main.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/sources"
+    },
+    "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/DevServer.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerListView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerRowView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/ServerScanner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.build/main.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/DevBar.product/Objects.LinkFileList"
+    },
+    "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/yanirmanor/yanir/devbar/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+    }
+  }
+}

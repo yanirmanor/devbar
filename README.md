@@ -19,9 +19,10 @@ A sleek macOS menu bar app that monitors your local dev servers.
 ### Homebrew
 
 ```bash
-brew tap yanirmanor/devbar
-brew install devbar
+brew install yanirmanor/devbar/devbar
 ```
+
+After install, run `devbar` in your terminal — the `</>` icon will appear in your menu bar.
 
 ### Manual Build
 
@@ -61,7 +62,6 @@ Then run `devbar` from your terminal — it sits in the menu bar.
 
 ```bash
 brew uninstall devbar
-brew untap yanirmanor/devbar
 ```
 
 ## License

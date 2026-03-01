@@ -24,6 +24,7 @@ final class ServerScanner {
             let directory = resolveDirectory(pid: pid)
             let startTime = resolveStartTime(pid: pid)
             let framework = detectFramework(processName: processName, directory: directory)
+            let branch = resolveGitBranch(directory: directory)
 
             servers.append(DevServer(
                 id: pid,
@@ -31,7 +32,8 @@ final class ServerScanner {
                 processName: processName,
                 directory: directory,
                 startTime: startTime,
-                detectedFramework: framework
+                detectedFramework: framework,
+                gitBranch: branch
             ))
         }
 
@@ -73,6 +75,19 @@ final class ServerScanner {
         }
 
         return nil
+    }
+
+    private func resolveGitBranch(directory: String) -> String? {
+        guard !directory.isEmpty else { return nil }
+        let headPath = (directory as NSString).appendingPathComponent(".git/HEAD")
+        guard let contents = try? String(contentsOfFile: headPath, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
+        else { return nil }
+        let prefix = "ref: refs/heads/"
+        if contents.hasPrefix(prefix) {
+            return String(contents.dropFirst(prefix.count))
+        }
+        // Detached HEAD — return short hash
+        return String(contents.prefix(7))
     }
 
     private func resolveDirectory(pid: Int32) -> String {

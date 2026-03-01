@@ -151,6 +151,7 @@ struct ServerListView: View {
             .padding(.bottom, 4)
         }
         .frame(width: 340)
+        .fixedSize(horizontal: false, vertical: true)
         .background(panelBG)
         .onAppear { viewModel.start() }
         .onDisappear { viewModel.stop() }
@@ -177,26 +178,24 @@ struct ServerListView: View {
                     .foregroundColor(textTertiary)
             }
         }
-        .frame(maxWidth: .infinity, minHeight: 140)
-        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 40)
     }
 
     // MARK: - Server List
 
     private var serverList: some View {
-        ScrollView {
-            LazyVStack(spacing: 4) {
-                ForEach(viewModel.servers) { server in
-                    ServerRowView(
-                        server: server,
-                        onOpen: { viewModel.open(server) },
-                        onKill: { viewModel.kill(server) }
-                    )
-                }
+        VStack(spacing: 4) {
+            ForEach(viewModel.servers) { server in
+                ServerRowView(
+                    server: server,
+                    onOpen: { viewModel.open(server) },
+                    onKill: { viewModel.kill(server) }
+                )
             }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 8)
         }
-        .frame(maxHeight: 500)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 8)
+        .frame(maxHeight: 600)
     }
 }

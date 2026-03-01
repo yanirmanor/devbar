@@ -8,6 +8,7 @@ struct DevServer: Identifiable, Equatable {
     let directory: String
     let startTime: Date
     var detectedFramework: String?
+    var gitBranch: String?
 
     var uptime: String {
         let interval = Date().timeIntervalSince(startTime)

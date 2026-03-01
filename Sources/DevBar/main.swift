@@ -9,12 +9,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
 
         popover = NSPopover()
-        popover.contentSize = NSSize(width: 340, height: 560)
+        popover.contentSize = NSSize(width: 340, height: 200)
         popover.behavior = .transient
-        popover.contentViewController = NSHostingController(
+        let hostingController = NSHostingController(
             rootView: ServerListView()
                 .environment(\.colorScheme, .dark)
         )
+        hostingController.sizingOptions = [.preferredContentSize]
+        popover.contentViewController = hostingController
 
         if let button = statusItem.button {
             button.image = NSImage(

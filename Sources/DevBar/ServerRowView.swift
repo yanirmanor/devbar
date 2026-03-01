@@ -1,4 +1,31 @@
 import SwiftUI
+import AppKit
+
+private struct TooltipOverlay: NSViewRepresentable {
+    let tooltip: String
+
+    func makeNSView(context: Context) -> NSView {
+        let view = TooltipHostView()
+        view.toolTip = tooltip
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        nsView.toolTip = tooltip
+    }
+}
+
+private class TooltipHostView: NSView {
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        return nil
+    }
+}
+
+extension View {
+    func richTooltip(_ text: String) -> some View {
+        overlay(TooltipOverlay(tooltip: text).allowsHitTesting(false))
+    }
+}
 
 struct ServerRowView: View {
     let server: DevServer
@@ -14,6 +41,20 @@ struct ServerRowView: View {
     private let textPrimary = Color(red: 0.92, green: 0.93, blue: 0.95)
     private let textSecondary = Color(red: 0.55, green: 0.58, blue: 0.64)
     private let greenDot = Color(red: 0.18, green: 0.82, blue: 0.50)
+
+    private var serverTooltip: String {
+        var parts: [String] = []
+        parts.append(server.displayName)
+        if !server.directory.isEmpty {
+            parts.append(server.directory)
+        }
+        parts.append("Port \(server.port)  ·  PID \(server.id)  ·  \(server.framework)")
+        if let branch = server.gitBranch {
+            parts.append("⎇ \(branch)")
+        }
+        parts.append("Up \(server.uptime)")
+        return parts.joined(separator: "\n")
+    }
 
     var body: some View {
         HStack(spacing: 12) {
@@ -45,6 +86,8 @@ struct ServerRowView: View {
                     .font(.system(size: 13.5, weight: .semibold))
                     .foregroundColor(textPrimary)
                     .lineLimit(1)
+                    .truncationMode(.middle)
+                    .richTooltip(serverTooltip)
 
                 HStack(spacing: 6) {
                     // Port badge
@@ -59,9 +102,20 @@ struct ServerRowView: View {
                                 .background(Capsule().fill(greenDot.opacity(0.08)))
                         )
 
-                    Text("Running")
-                        .font(.system(size: 11))
-                        .foregroundColor(textSecondary)
+                    if let branch = server.gitBranch {
+                        HStack(spacing: 3) {
+                            Image(systemName: "arrow.triangle.branch")
+                                .font(.system(size: 8.5, weight: .semibold))
+                            Text(branch)
+                                .font(.system(size: 10.5, weight: .medium, design: .monospaced))
+                                .lineLimit(1)
+                        }
+                        .foregroundColor(Color(red: 0.65, green: 0.55, blue: 1.0))
+                    } else {
+                        Text("Running")
+                            .font(.system(size: 11))
+                            .foregroundColor(textSecondary)
+                    }
                 }
             }
 

@@ -44,109 +44,114 @@ struct ServerListView: View {
     @StateObject private var viewModel = ServerViewModel()
     @State private var refreshHovered = false
     @State private var quitHovered = false
-    @Environment(\.colorScheme) private var colorScheme
+
+    private let panelBG = Color(red: 0.13, green: 0.14, blue: 0.16)
+    private let textPrimary = Color(red: 0.92, green: 0.93, blue: 0.95)
+    private let textSecondary = Color(red: 0.55, green: 0.58, blue: 0.64)
+    private let textTertiary = Color(red: 0.40, green: 0.42, blue: 0.48)
+    private let dividerColor = Color.white.opacity(0.06)
+    private let greenDot = Color(red: 0.18, green: 0.82, blue: 0.50)
 
     var body: some View {
         VStack(spacing: 0) {
             // ── Header ──
             HStack(alignment: .center) {
-                HStack(spacing: 7) {
+                HStack(spacing: 10) {
+                    // App icon
                     ZStack {
-                        RoundedRectangle(cornerRadius: 5)
+                        RoundedRectangle(cornerRadius: 8)
                             .fill(
                                 LinearGradient(
                                     colors: [
-                                        Color(red: 0.35, green: 0.55, blue: 1.0),
-                                        Color(red: 0.28, green: 0.44, blue: 0.95)
+                                        Color(red: 0.30, green: 0.54, blue: 1.0),
+                                        Color(red: 0.22, green: 0.40, blue: 0.90)
                                     ],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 )
                             )
-                            .frame(width: 20, height: 20)
-                        Image(systemName: "terminal.fill")
-                            .font(.system(size: 10, weight: .bold))
+                            .frame(width: 30, height: 30)
+                        Image(systemName: "chevron.left.forwardslash.chevron.right")
+                            .font(.system(size: 13, weight: .bold))
                             .foregroundColor(.white)
                     }
-                    Text("DevBar")
-                        .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(colorScheme == .dark ? .white : Color(red: 0.1, green: 0.1, blue: 0.12))
+
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("DevBar")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(textPrimary)
+                        Text("Local Environment")
+                            .font(.system(size: 10.5))
+                            .foregroundColor(textTertiary)
+                    }
                 }
 
                 Spacer()
 
-                // Server count badge
+                // Count badge
                 if !viewModel.servers.isEmpty {
                     Text("\(viewModel.servers.count)")
                         .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .foregroundColor(colorScheme == .dark ? Color.white.opacity(0.5) : Color.black.opacity(0.4))
-                        .frame(width: 20, height: 20)
+                        .foregroundColor(textSecondary)
+                        .frame(width: 22, height: 22)
                         .background(
-                            Circle()
-                                .fill(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.05))
+                            Circle().fill(Color.white.opacity(0.07))
                         )
                 }
 
+                // Refresh
                 Button(action: { viewModel.refresh() }) {
                     Image(systemName: "arrow.clockwise")
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundColor(refreshHovered
-                            ? (colorScheme == .dark ? .white : Color(red: 0.1, green: 0.1, blue: 0.12))
-                            : (colorScheme == .dark ? Color.white.opacity(0.45) : Color.black.opacity(0.35)))
-                        .frame(width: 26, height: 26)
+                        .font(.system(size: 11.5, weight: .semibold))
+                        .foregroundColor(refreshHovered ? textPrimary : textSecondary)
+                        .frame(width: 28, height: 28)
                         .background(
-                            RoundedRectangle(cornerRadius: 6)
-                                .fill(refreshHovered
-                                    ? (colorScheme == .dark ? Color.white.opacity(0.1) : Color.black.opacity(0.06))
-                                    : (colorScheme == .dark ? Color.white.opacity(0.05) : Color.black.opacity(0.03)))
+                            RoundedRectangle(cornerRadius: 7)
+                                .fill(refreshHovered ? Color.white.opacity(0.1) : Color.white.opacity(0.05))
                         )
-                        .scaleEffect(refreshHovered ? 1.05 : 1.0)
                 }
                 .buttonStyle(.plain)
-                .onHover { h in withAnimation(.easeOut(duration: 0.15)) { refreshHovered = h } }
+                .onHover { h in withAnimation(.easeOut(duration: 0.12)) { refreshHovered = h } }
                 .help("Refresh")
             }
             .padding(.horizontal, 14)
-            .padding(.top, 14)
-            .padding(.bottom, 10)
+            .padding(.top, 16)
+            .padding(.bottom, 12)
 
-            // Thin separator
-            Rectangle()
-                .fill(colorScheme == .dark ? Color.white.opacity(0.07) : Color.black.opacity(0.06))
-                .frame(height: 0.5)
+            // Divider
+            Rectangle().fill(dividerColor).frame(height: 1)
                 .padding(.horizontal, 12)
 
-            // ── Content ──
+            // ── Server list ──
             if viewModel.servers.isEmpty {
                 emptyState
             } else {
                 serverList
             }
 
-            // Thin separator
-            Rectangle()
-                .fill(colorScheme == .dark ? Color.white.opacity(0.07) : Color.black.opacity(0.06))
-                .frame(height: 0.5)
+            // Divider
+            Rectangle().fill(dividerColor).frame(height: 1)
                 .padding(.horizontal, 12)
 
             // ── Footer ──
+            // Quit
             Button(action: { NSApplication.shared.terminate(nil) }) {
                 HStack(spacing: 5) {
                     Image(systemName: "power")
-                        .font(.system(size: 9.5, weight: .semibold))
+                        .font(.system(size: 9, weight: .semibold))
                     Text("Quit DevBar")
-                        .font(.system(size: 11.5, weight: .medium))
+                        .font(.system(size: 11, weight: .medium))
                 }
-                .foregroundColor(quitHovered
-                    ? (colorScheme == .dark ? Color.white.opacity(0.7) : Color.black.opacity(0.6))
-                    : (colorScheme == .dark ? Color.white.opacity(0.35) : Color.black.opacity(0.3)))
+                .foregroundColor(quitHovered ? textSecondary : textTertiary)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 10)
+                .padding(.vertical, 6)
             }
             .buttonStyle(.plain)
-            .onHover { h in withAnimation(.easeOut(duration: 0.15)) { quitHovered = h } }
+            .onHover { h in withAnimation(.easeOut(duration: 0.12)) { quitHovered = h } }
+            .padding(.bottom, 4)
         }
-        .frame(width: 330)
+        .frame(width: 340)
+        .background(panelBG)
         .onAppear { viewModel.start() }
         .onDisappear { viewModel.stop() }
     }
@@ -157,19 +162,19 @@ struct ServerListView: View {
         VStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(colorScheme == .dark ? Color.white.opacity(0.04) : Color.black.opacity(0.03))
+                    .fill(Color.white.opacity(0.04))
                     .frame(width: 56, height: 56)
                 Image(systemName: "server.rack")
                     .font(.system(size: 24, weight: .light))
-                    .foregroundColor(colorScheme == .dark ? Color.white.opacity(0.2) : Color.black.opacity(0.18))
+                    .foregroundColor(textTertiary)
             }
             VStack(spacing: 4) {
                 Text("No dev servers running")
                     .font(.system(size: 13, weight: .medium))
-                    .foregroundColor(colorScheme == .dark ? Color.white.opacity(0.5) : Color.black.opacity(0.45))
+                    .foregroundColor(textSecondary)
                 Text("Scanning ports 3000 – 9000")
                     .font(.system(size: 11))
-                    .foregroundColor(colorScheme == .dark ? Color.white.opacity(0.25) : Color.black.opacity(0.22))
+                    .foregroundColor(textTertiary)
             }
         }
         .frame(maxWidth: .infinity, minHeight: 140)
@@ -180,7 +185,7 @@ struct ServerListView: View {
 
     private var serverList: some View {
         ScrollView {
-            LazyVStack(spacing: 2) {
+            LazyVStack(spacing: 4) {
                 ForEach(viewModel.servers) { server in
                     ServerRowView(
                         server: server,
@@ -189,8 +194,9 @@ struct ServerListView: View {
                     )
                 }
             }
-            .padding(.vertical, 6)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 8)
         }
-        .frame(maxHeight: 350)
+        .frame(maxHeight: 500)
     }
 }

@@ -9,13 +9,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
 
         popover = NSPopover()
-        popover.contentSize = NSSize(width: 330, height: 420)
+        popover.contentSize = NSSize(width: 340, height: 560)
         popover.behavior = .transient
-        popover.contentViewController = NSHostingController(rootView: ServerListView())
+        popover.contentViewController = NSHostingController(
+            rootView: ServerListView()
+                .environment(\.colorScheme, .dark)
+        )
 
         if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "terminal.fill", accessibilityDescription: "DevBar")
-            button.image?.size = NSSize(width: 16, height: 16)
+            button.image = NSImage(
+                systemSymbolName: "chevron.left.forwardslash.chevron.right",
+                accessibilityDescription: "DevBar"
+            )
+            button.image?.size = NSSize(width: 18, height: 14)
             button.image?.isTemplate = true
             button.action = #selector(togglePopover(_:))
             button.target = self

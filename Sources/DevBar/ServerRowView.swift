@@ -8,95 +8,91 @@ struct ServerRowView: View {
     @State private var isHovered = false
     @State private var openHovered = false
     @State private var killHovered = false
-    @Environment(\.colorScheme) private var colorScheme
 
-    private var cardBG: Color {
-        if isHovered {
-            return colorScheme == .dark
-                ? Color.white.opacity(0.055)
-                : Color.black.opacity(0.035)
-        }
-        return colorScheme == .dark
-            ? Color.white.opacity(0.03)
-            : Color.black.opacity(0.018)
-    }
+    private let bg = Color(red: 0.16, green: 0.17, blue: 0.20)
+    private let bgHover = Color(red: 0.19, green: 0.20, blue: 0.24)
+    private let textPrimary = Color(red: 0.92, green: 0.93, blue: 0.95)
+    private let textSecondary = Color(red: 0.55, green: 0.58, blue: 0.64)
+    private let greenDot = Color(red: 0.18, green: 0.82, blue: 0.50)
 
     var body: some View {
-        HStack(spacing: 10) {
-            // Status dot
-            ZStack {
+        HStack(spacing: 12) {
+            // Framework icon with status dot
+            ZStack(alignment: .bottomTrailing) {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(server.frameworkColor.opacity(0.15))
+                    .frame(width: 38, height: 38)
+                    .overlay(
+                        Image(systemName: server.frameworkIcon)
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(server.frameworkColor)
+                    )
+
+                // Green dot
                 Circle()
-                    .fill(Color(red: 0.2, green: 0.84, blue: 0.46))
-                    .frame(width: 8, height: 8)
-                Circle()
-                    .fill(Color(red: 0.2, green: 0.84, blue: 0.46).opacity(0.35))
-                    .frame(width: 14, height: 14)
+                    .fill(greenDot)
+                    .frame(width: 9, height: 9)
+                    .overlay(
+                        Circle()
+                            .stroke(Color(red: 0.13, green: 0.14, blue: 0.16), lineWidth: 2)
+                    )
+                    .offset(x: 2, y: 2)
             }
-            .frame(width: 14)
 
             // Info
             VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 7) {
-                    Text(server.displayName)
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(colorScheme == .dark ? .white : Color(red: 0.12, green: 0.12, blue: 0.14))
-                        .lineLimit(1)
+                Text(server.displayName)
+                    .font(.system(size: 13.5, weight: .semibold))
+                    .foregroundColor(textPrimary)
+                    .lineLimit(1)
 
-                    Text(server.framework)
-                        .font(.system(size: 9.5, weight: .semibold))
-                        .tracking(0.3)
-                        .foregroundColor(.white)
+                HStack(spacing: 6) {
+                    // Port badge
+                    Text("\(server.port)")
+                        .font(.system(size: 10.5, weight: .semibold, design: .monospaced))
+                        .foregroundColor(greenDot)
                         .padding(.horizontal, 7)
-                        .padding(.vertical, 2.5)
+                        .padding(.vertical, 2)
                         .background(
-                            Capsule().fill(server.frameworkColor.opacity(0.85))
+                            Capsule()
+                                .stroke(greenDot.opacity(0.4), lineWidth: 1)
+                                .background(Capsule().fill(greenDot.opacity(0.08)))
                         )
-                }
 
-                HStack(spacing: 5) {
-                    Text(":\(server.port)")
-                        .font(.system(size: 11, weight: .medium, design: .monospaced))
-                        .foregroundColor(colorScheme == .dark
-                            ? Color.white.opacity(0.4)
-                            : Color.black.opacity(0.38))
-
-                    Circle()
-                        .fill(colorScheme == .dark ? Color.white.opacity(0.15) : Color.black.opacity(0.12))
-                        .frame(width: 2.5, height: 2.5)
-
-                    Text(server.uptime)
-                        .font(.system(size: 10.5))
-                        .foregroundColor(colorScheme == .dark
-                            ? Color.white.opacity(0.3)
-                            : Color.black.opacity(0.3))
+                    Text("Running")
+                        .font(.system(size: 11))
+                        .foregroundColor(textSecondary)
                 }
             }
 
             Spacer(minLength: 4)
 
             // Actions
-            HStack(spacing: 5) {
+            HStack(spacing: 6) {
                 Button(action: onOpen) {
                     Text("Open")
-                        .font(.system(size: 11, weight: .semibold))
+                        .font(.system(size: 11.5, weight: .semibold))
                         .foregroundColor(.white)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 5)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 6)
                         .background(
                             Capsule()
                                 .fill(
                                     LinearGradient(
                                         colors: [
-                                            Color(red: 0.28, green: 0.52, blue: 1.0),
-                                            Color(red: 0.22, green: 0.44, blue: 0.95)
+                                            Color(red: 0.30, green: 0.54, blue: 1.0),
+                                            Color(red: 0.24, green: 0.46, blue: 0.94)
                                         ],
                                         startPoint: .top,
                                         endPoint: .bottom
                                     )
                                 )
-                                .shadow(color: Color(red: 0.25, green: 0.48, blue: 1.0).opacity(openHovered ? 0.4 : 0.2), radius: openHovered ? 6 : 3, y: 1)
+                                .shadow(
+                                    color: Color(red: 0.28, green: 0.50, blue: 1.0).opacity(openHovered ? 0.35 : 0.0),
+                                    radius: 8, y: 2
+                                )
                         )
-                        .scaleEffect(openHovered ? 1.04 : 1.0)
+                        .scaleEffect(openHovered ? 1.03 : 1.0)
                 }
                 .buttonStyle(.plain)
                 .onHover { h in withAnimation(.easeOut(duration: 0.15)) { openHovered = h } }
@@ -104,18 +100,14 @@ struct ServerRowView: View {
 
                 Button(action: onKill) {
                     Image(systemName: "xmark")
-                        .font(.system(size: 9, weight: .bold))
-                        .foregroundColor(killHovered
-                            ? .white
-                            : (colorScheme == .dark ? Color.white.opacity(0.4) : Color.black.opacity(0.35)))
-                        .frame(width: 24, height: 24)
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(killHovered ? .white : textSecondary)
+                        .frame(width: 26, height: 26)
                         .background(
-                            RoundedRectangle(cornerRadius: 6)
+                            Circle()
                                 .fill(killHovered
-                                    ? Color(red: 0.9, green: 0.25, blue: 0.25)
-                                    : (colorScheme == .dark
-                                        ? Color.white.opacity(0.06)
-                                        : Color.black.opacity(0.04)))
+                                    ? Color(red: 0.85, green: 0.22, blue: 0.22)
+                                    : Color.white.opacity(0.06))
                         )
                         .scaleEffect(killHovered ? 1.08 : 1.0)
                 }
@@ -127,11 +119,10 @@ struct ServerRowView: View {
         .padding(.vertical, 10)
         .padding(.horizontal, 12)
         .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(cardBG)
+            RoundedRectangle(cornerRadius: 10)
+                .fill(isHovered ? bgHover : bg)
         )
-        .padding(.horizontal, 8)
-        .animation(.easeOut(duration: 0.15), value: isHovered)
-        .onHover { hovering in isHovered = hovering }
+        .animation(.easeOut(duration: 0.12), value: isHovered)
+        .onHover { h in isHovered = h }
     }
 }

@@ -50,20 +50,37 @@ struct DevServer: Identifiable, Equatable {
         }
     }
 
+    var frameworkIcon: String {
+        switch framework {
+        case "Next.js":   return "n.square.fill"
+        case "Remix":     return "r.square.fill"
+        case "Vite":      return "bolt.square.fill"
+        case "Nuxt":      return "n.square.fill"
+        case "Astro":     return "a.square.fill"
+        case "SvelteKit": return "s.square.fill"
+        case "Python":    return "p.square.fill"
+        case "Rails":     return "r.square.fill"
+        case "Go":        return "g.square.fill"
+        case "PHP":       return "p.square.fill"
+        case "Java":      return "j.square.fill"
+        default:          return "chevron.left.forwardslash.chevron.right"
+        }
+    }
+
     var frameworkColor: Color {
         switch framework {
-        case "Next.js":   return Color(red: 0.20, green: 0.20, blue: 0.22)
+        case "Next.js":   return Color.white
         case "Remix":     return Color(red: 0.32, green: 0.45, blue: 1.0)
         case "Vite":      return Color(red: 0.55, green: 0.36, blue: 1.0)
-        case "Nuxt":      return Color(red: 0.0, green: 0.75, blue: 0.45)
+        case "Nuxt":      return Color(red: 0.0, green: 0.82, blue: 0.45)
         case "Astro":     return Color(red: 1.0, green: 0.35, blue: 0.2)
         case "SvelteKit": return Color(red: 1.0, green: 0.24, blue: 0.0)
-        case "Python":    return Color(red: 0.26, green: 0.52, blue: 0.96)
-        case "Rails":     return Color(red: 0.8, green: 0.0, blue: 0.0)
-        case "Go":        return Color(red: 0.0, green: 0.68, blue: 0.84)
-        case "PHP":       return Color(red: 0.55, green: 0.55, blue: 0.80)
-        case "Java":      return Color(red: 0.90, green: 0.55, blue: 0.25)
-        default:          return Color(nsColor: .tertiaryLabelColor)
+        case "Python":    return Color(red: 0.30, green: 0.55, blue: 0.96)
+        case "Rails":     return Color(red: 0.85, green: 0.2, blue: 0.2)
+        case "Go":        return Color(red: 0.0, green: 0.75, blue: 0.88)
+        case "PHP":       return Color(red: 0.55, green: 0.55, blue: 0.82)
+        case "Java":      return Color(red: 0.92, green: 0.55, blue: 0.22)
+        default:          return Color(red: 0.35, green: 0.85, blue: 0.7)
         }
     }
 }

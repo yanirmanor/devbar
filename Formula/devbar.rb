@@ -2,7 +2,7 @@ class Devbar < Formula
   desc "macOS menu bar app that monitors local dev servers"
   homepage "https://github.com/yanirmanor/devbar"
   url "https://github.com/yanirmanor/devbar/archive/refs/tags/v1.0.0.tar.gz"
-  # sha256 "UPDATE_THIS_AFTER_RELEASE"
+  sha256 "b4e96b7e14e81fc2b70ade6386da851629b0d27607a11bdda367ef51fc5bf33b"
   license "MIT"
 
   depends_on xcode: ["14.0", :build]

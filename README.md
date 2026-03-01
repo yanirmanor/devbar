@@ -22,7 +22,7 @@ A sleek macOS menu bar app that monitors your local dev servers.
 brew install yanirmanor/devbar/devbar
 ```
 
-After install, run `devbar` in your terminal — the `</>` icon will appear in your menu bar.
+DevBar will appear in Spotlight, Raycast, and /Applications.
 
 ### Manual Build
 
@@ -31,11 +31,15 @@ Requires **macOS 13+** and **Swift 5.9+**.
 ```bash
 git clone https://github.com/yanirmanor/devbar.git
 cd devbar
-swift build -c release
-cp .build/release/DevBar /usr/local/bin/devbar
+make app
+make install-app
 ```
 
-Then run `devbar` from your terminal — it sits in the menu bar.
+Or to install as a CLI only:
+
+```bash
+make install
+```
 
 ## Usage
 

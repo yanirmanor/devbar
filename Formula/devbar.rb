@@ -11,12 +11,24 @@ class Devbar < Formula
   def install
     system "swift", "build", "-c", "release", "--disable-sandbox"
     bin.install ".build/release/DevBar" => "devbar"
+
+    # Build .app bundle for Spotlight / Raycast discovery
+    app_dir = prefix/"DevBar.app/Contents"
+    (app_dir/"MacOS").mkpath
+    (app_dir/"Resources").mkpath
+    cp buildpath/"assets/Info.plist", app_dir/"Info.plist"
+    cp ".build/release/DevBar", app_dir/"MacOS/DevBar"
+  end
+
+  def post_install
+    ln_sf prefix/"DevBar.app", "/Applications/DevBar.app"
   end
 
   def caveats
     <<~EOS
-      DevBar runs as a menu bar app. Start it with:
-        devbar
+      DevBar has been added to /Applications.
+      Open it from Spotlight, Raycast, or run:
+        open /Applications/DevBar.app
       It will appear as a </> icon in your menu bar.
     EOS
   end

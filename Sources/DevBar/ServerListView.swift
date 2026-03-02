@@ -1,10 +1,15 @@
 import SwiftUI
 import Combine
+import AppKit
 
 final class ServerViewModel: ObservableObject {
     @Published var servers: [DevServer] = []
+    @Published var agents: [AIAgent] = []
     private let scanner = ServerScanner()
+    private let agentScanner = AgentScanner()
     private var timer: Timer?
+
+    var totalCount: Int { servers.count + agents.count }
 
     func start() {
         refresh()
@@ -21,9 +26,11 @@ final class ServerViewModel: ObservableObject {
     func refresh() {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self else { return }
-            let results = self.scanner.scan()
+            let serverResults = self.scanner.scan()
+            let agentResults = self.agentScanner.scan()
             DispatchQueue.main.async {
-                self.servers = results
+                self.servers = serverResults
+                self.agents = agentResults
             }
         }
     }
@@ -37,6 +44,11 @@ final class ServerViewModel: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             self?.refresh()
         }
+    }
+
+    func revealInFinder(_ agent: AIAgent) {
+        guard !agent.directory.isEmpty else { return }
+        NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: agent.directory)
     }
 }
 
@@ -89,8 +101,8 @@ struct ServerListView: View {
                 Spacer()
 
                 // Count badge
-                if !viewModel.servers.isEmpty {
-                    Text("\(viewModel.servers.count)")
+                if viewModel.totalCount > 0 {
+                    Text("\(viewModel.totalCount)")
                         .font(.system(size: 10, weight: .bold, design: .rounded))
                         .foregroundColor(textSecondary)
                         .frame(width: 22, height: 22)
@@ -122,11 +134,11 @@ struct ServerListView: View {
             Rectangle().fill(dividerColor).frame(height: 1)
                 .padding(.horizontal, 12)
 
-            // ── Server list ──
-            if viewModel.servers.isEmpty {
+            // ── Content ──
+            if viewModel.servers.isEmpty && viewModel.agents.isEmpty {
                 emptyState
             } else {
-                serverList
+                mainContent
             }
 
             // Divider
@@ -170,10 +182,10 @@ struct ServerListView: View {
                     .foregroundColor(textTertiary)
             }
             VStack(spacing: 4) {
-                Text("No dev servers running")
+                Text("No dev servers or AI agents running")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(textSecondary)
-                Text("Scanning ports 3000 – 9000")
+                Text("Scanning ports 3000 – 9000 and processes")
                     .font(.system(size: 11))
                     .foregroundColor(textTertiary)
             }
@@ -182,20 +194,59 @@ struct ServerListView: View {
         .padding(.vertical, 40)
     }
 
-    // MARK: - Server List
+    // MARK: - Main Content
 
-    private var serverList: some View {
-        VStack(spacing: 4) {
-            ForEach(viewModel.servers) { server in
-                ServerRowView(
-                    server: server,
-                    onOpen: { viewModel.open(server) },
-                    onKill: { viewModel.kill(server) }
-                )
+    private var mainContent: some View {
+        ScrollView {
+            VStack(spacing: 4) {
+                if !viewModel.servers.isEmpty {
+                    sectionHeader("DEV SERVERS", count: viewModel.servers.count)
+                    ForEach(viewModel.servers) { server in
+                        ServerRowView(
+                            server: server,
+                            onOpen: { viewModel.open(server) },
+                            onKill: { viewModel.kill(server) }
+                        )
+                    }
+                }
+
+                if !viewModel.servers.isEmpty && !viewModel.agents.isEmpty {
+                    Rectangle().fill(dividerColor).frame(height: 1)
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 4)
+                }
+
+                if !viewModel.agents.isEmpty {
+                    sectionHeader("AI AGENTS", count: viewModel.agents.count)
+                    ForEach(viewModel.agents) { agent in
+                        AgentRowView(
+                            agent: agent,
+                            onReveal: { viewModel.revealInFinder(agent) }
+                        )
+                    }
+                }
             }
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 8)
         .frame(maxHeight: 600)
+    }
+
+    // MARK: - Section Header
+
+    private func sectionHeader(_ title: String, count: Int) -> some View {
+        HStack {
+            Text(title)
+                .font(.system(size: 10, weight: .bold))
+                .foregroundColor(textTertiary)
+                .tracking(0.8)
+            Spacer()
+            Text("\(count)")
+                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                .foregroundColor(textTertiary)
+        }
+        .padding(.horizontal, 12)
+        .padding(.top, 6)
+        .padding(.bottom, 2)
     }
 }

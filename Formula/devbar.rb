@@ -1,5 +1,5 @@
 class Devbar < Formula
-  desc "macOS menu bar app that monitors local dev servers"
+  desc "macOS menu bar app that monitors local dev servers and AI coding agents"
   homepage "https://github.com/yanirmanor/devbar"
   url "https://github.com/yanirmanor/devbar/archive/refs/tags/v1.2.0.tar.gz"
   sha256 "92d03e4cd46ae5e55ff95ef100124a3c124b429747b22559f6205b2a85c1e909"

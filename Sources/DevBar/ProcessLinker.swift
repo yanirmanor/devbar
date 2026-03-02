@@ -16,8 +16,9 @@ final class ProcessLinker {
                 // Linked via PPID chain
                 server.parentAgentPID = parentPID
                 agentMap[parentPID]?.childServers.append(server)
-            } else if let parentPID = findAgentByDirectory(server: server, agents: agents) {
-                // Fallback: match by working directory (handles reparented processes)
+            } else if isReparented(pid: server.id),
+                      let parentPID = findAgentByDirectory(server: server, agents: agents) {
+                // Fallback: match by working directory only for reparented processes (parent is launchd/PID 1)
                 server.parentAgentPID = parentPID
                 agentMap[parentPID]?.childServers.append(server)
             } else {
@@ -46,6 +47,12 @@ final class ProcessLinker {
             current = ppid
         }
         return nil
+    }
+
+    /// Check if a process has been reparented to launchd (PID 1), indicating its original parent exited.
+    private func isReparented(pid: Int32) -> Bool {
+        let ppid = getParentPID(of: pid)
+        return ppid == 1
     }
 
     /// Fallback: if a server's working directory is the same as or a subdirectory of an agent's directory, link them.

@@ -15,7 +15,7 @@ final class ServerScanner {
             let nameField = String(cols[8])
             guard let colonIdx = nameField.lastIndex(of: ":") else { continue }
             let portStr = nameField[nameField.index(after: colonIdx)...]
-            guard let port = UInt16(portStr), (3000...9000).contains(port) else { continue }
+            guard let port = UInt16(portStr), (1024...65535).contains(port) else { continue }
 
             guard !seen.contains(pid) else { continue }
             seen.insert(pid)

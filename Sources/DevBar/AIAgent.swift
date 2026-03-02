@@ -46,6 +46,9 @@ struct AIAgent: Identifiable, Equatable {
     let directory: String
     let startTime: Date
     var gitBranch: String?
+    var childServers: [DevServer] = []
+
+    var hasServers: Bool { !childServers.isEmpty }
 
     var uptime: String {
         let interval = Date().timeIntervalSince(startTime)

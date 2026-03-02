@@ -9,6 +9,7 @@ struct DevServer: Identifiable, Equatable {
     let startTime: Date
     var detectedFramework: String?
     var gitBranch: String?
+    var parentAgentPID: Int32?
 
     var uptime: String {
         let interval = Date().timeIntervalSince(startTime)

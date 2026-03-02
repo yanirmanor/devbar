@@ -3,13 +3,16 @@ import Combine
 import AppKit
 
 final class ServerViewModel: ObservableObject {
-    @Published var servers: [DevServer] = []
+    @Published var orphanServers: [DevServer] = []
     @Published var agents: [AIAgent] = []
     private let scanner = ServerScanner()
     private let agentScanner = AgentScanner()
+    private let linker = ProcessLinker()
     private var timer: Timer?
 
-    var totalCount: Int { servers.count + agents.count }
+    var totalCount: Int {
+        orphanServers.count + agents.count + agents.reduce(0) { $0 + $1.childServers.count }
+    }
 
     func start() {
         refresh()
@@ -28,9 +31,10 @@ final class ServerViewModel: ObservableObject {
             guard let self else { return }
             let serverResults = self.scanner.scan()
             let agentResults = self.agentScanner.scan()
+            let result = self.linker.link(agents: agentResults, servers: serverResults)
             DispatchQueue.main.async {
-                self.servers = serverResults
-                self.agents = agentResults
+                self.agents = result.linkedAgents
+                self.orphanServers = result.orphanServers
             }
         }
     }
@@ -49,6 +53,28 @@ final class ServerViewModel: ObservableObject {
     func revealInFinder(_ agent: AIAgent) {
         guard !agent.directory.isEmpty else { return }
         NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: agent.directory)
+    }
+
+    func killAgent(_ agent: AIAgent) {
+        // Kill child servers first, then the agent
+        for server in agent.childServers {
+            scanner.kill(pid: server.id)
+        }
+        scanner.kill(pid: agent.id)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.refresh()
+        }
+    }
+
+    func killAgentServer(_ server: DevServer) {
+        scanner.kill(pid: server.id)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.refresh()
+        }
+    }
+
+    func openAgentServer(_ server: DevServer) {
+        scanner.openInBrowser(port: server.port)
     }
 }
 
@@ -135,7 +161,7 @@ struct ServerListView: View {
                 .padding(.horizontal, 12)
 
             // ── Content ──
-            if viewModel.servers.isEmpty && viewModel.agents.isEmpty {
+            if viewModel.orphanServers.isEmpty && viewModel.agents.isEmpty {
                 emptyState
             } else {
                 mainContent
@@ -185,7 +211,7 @@ struct ServerListView: View {
                 Text("No dev servers or AI agents running")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(textSecondary)
-                Text("Scanning ports 3000 – 9000 and processes")
+                Text("Scanning ports and processes")
                     .font(.system(size: 11))
                     .foregroundColor(textTertiary)
             }
@@ -199,9 +225,9 @@ struct ServerListView: View {
     private var mainContent: some View {
         ScrollView {
             VStack(spacing: 4) {
-                if !viewModel.servers.isEmpty {
-                    sectionHeader("DEV SERVERS", count: viewModel.servers.count)
-                    ForEach(viewModel.servers) { server in
+                if !viewModel.orphanServers.isEmpty {
+                    sectionHeader("DEV SERVERS", count: viewModel.orphanServers.count)
+                    ForEach(viewModel.orphanServers) { server in
                         ServerRowView(
                             server: server,
                             onOpen: { viewModel.open(server) },
@@ -210,7 +236,7 @@ struct ServerListView: View {
                     }
                 }
 
-                if !viewModel.servers.isEmpty && !viewModel.agents.isEmpty {
+                if !viewModel.orphanServers.isEmpty && !viewModel.agents.isEmpty {
                     Rectangle().fill(dividerColor).frame(height: 1)
                         .padding(.horizontal, 4)
                         .padding(.vertical, 4)
@@ -221,7 +247,10 @@ struct ServerListView: View {
                     ForEach(viewModel.agents) { agent in
                         AgentRowView(
                             agent: agent,
-                            onReveal: { viewModel.revealInFinder(agent) }
+                            onReveal: { viewModel.revealInFinder(agent) },
+                            onKillAgent: { viewModel.killAgent(agent) },
+                            onKillServer: { viewModel.killAgentServer($0) },
+                            onOpenServer: { viewModel.openAgentServer($0) }
                         )
                     }
                 }

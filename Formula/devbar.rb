@@ -23,7 +23,8 @@ class Devbar < Formula
   end
 
   def post_install
-    ln_sf prefix/"DevBar.app", "/Applications/DevBar.app"
+    system "rm", "-rf", "/Applications/DevBar.app"
+    system "cp", "-R", (prefix/"DevBar.app").to_s, "/Applications/DevBar.app"
   end
 
   def caveats

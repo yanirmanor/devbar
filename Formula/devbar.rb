@@ -5,7 +5,6 @@ class Devbar < Formula
   sha256 "f52c454ab8888ea25841299e908de45a4d3ab6b9f38f21c1dcbb4b0ccf851ea2"
   license "MIT"
 
-  depends_on xcode: ["14.0", :build]
   depends_on :macos
 
   def install

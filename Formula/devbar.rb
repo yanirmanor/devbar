@@ -2,7 +2,7 @@ class Devbar < Formula
   desc "macOS menu bar app that monitors local dev servers and AI coding agents"
   homepage "https://github.com/yanirmanor/devbar"
   url "https://github.com/yanirmanor/devbar/archive/refs/tags/v1.5.1.tar.gz"
-  sha256 "a5211bfdecc1262aee8cb8aaa5585203e57f5aff0b68aa0c3b863ad3035bf378"
+  sha256 "f72ebdac692ed0bc4038242a0b136cfe728e34abbf7a5737883f308ab9d0fd98"
   license "MIT"
 
   depends_on :macos

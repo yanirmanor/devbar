@@ -115,9 +115,14 @@ struct ServerListView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 1) {
-                        Text("DevBar")
-                            .font(.system(size: 14, weight: .bold))
-                            .foregroundColor(textPrimary)
+                        HStack(spacing: 6) {
+                            Text("DevBar")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(textPrimary)
+                            Text("v\(AppVersion.current)")
+                                .font(.system(size: 10, weight: .medium, design: .monospaced))
+                                .foregroundColor(textTertiary)
+                        }
                         Text("Local Environment")
                             .font(.system(size: 10.5))
                             .foregroundColor(textTertiary)

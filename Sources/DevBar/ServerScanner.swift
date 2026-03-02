@@ -1,6 +1,21 @@
 import Foundation
 
 final class ServerScanner {
+    // System/infrastructure processes that listen on ports but aren't dev servers
+    private static let ignoredProcesses: Set<String> = [
+        "controlce", "rapportd", "raycast", "github", "githubdeskt",
+        "spotify", "slack", "discord", "telegram", "zoom.us",
+        "firefox", "safari", "google", "chrome", "brave",
+        "1password", "bitwarden", "dropbox", "onedrive",
+        "adobe", "figma", "notion", "linear",
+        "launchd", "mds", "mdsync", "mdworker",
+        "airplayxpcsend", "sharingd", "wirelessprox",
+        "identityservi", "bluetoothd", "configd",
+        "remotemanagem", "screensharind",
+        "logd", "syslogd", "coreautha", "loginwindow",
+        "stable",  // Cursor internal
+    ]
+
     func scan() -> [DevServer] {
         let output = shell("lsof", "-iTCP", "-sTCP:LISTEN", "-n", "-P")
         var seen = Set<Int32>()
@@ -21,6 +36,10 @@ final class ServerScanner {
             seen.insert(pid)
 
             let processName = String(cols[0])
+
+            // Skip known system/non-dev processes
+            guard !Self.ignoredProcesses.contains(processName.lowercased()) else { continue }
+
             let directory = resolveDirectory(pid: pid)
             let startTime = resolveStartTime(pid: pid)
             let framework = detectFramework(processName: processName, directory: directory)

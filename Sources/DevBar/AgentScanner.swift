@@ -18,11 +18,24 @@ final class AgentScanner {
             guard !seen.contains(pid) else { continue }
             seen.insert(pid)
 
-            let directory = resolveDirectory(pid: pid)
+            var directory = resolveDirectory(pid: pid)
+
+            // Cursor's main process cwd is "/" — resolve from storage.json instead
+            if agentType == .cursor && (directory == "/" || directory.isEmpty) {
+                directory = resolveCursorActiveProject() ?? ""
+            }
+
             let startTime = resolveStartTime(pid: pid)
             let branch = resolveGitBranch(directory: directory)
 
             let processName = command.split(separator: " ").first.map(String.init) ?? command
+            let memory = resolveMemory(pid: pid)
+            let cpu = resolveCPU(pid: pid)
+
+            var sessionId: String?
+            if agentType == .claudeCode {
+                sessionId = resolveClaudeSessionId(directory: directory)
+            }
 
             agents.append(AIAgent(
                 id: pid,
@@ -30,7 +43,10 @@ final class AgentScanner {
                 processName: processName,
                 directory: directory,
                 startTime: startTime,
-                gitBranch: branch
+                gitBranch: branch,
+                memoryMB: memory,
+                cpuPercent: cpu,
+                sessionId: sessionId
             ))
         }
 
@@ -101,6 +117,76 @@ final class AgentScanner {
         }
         formatter.dateFormat = "EEE MMM  d HH:mm:ss yyyy"
         return formatter.date(from: output) ?? Date()
+    }
+
+    private func resolveMemory(pid: Int32) -> Int {
+        let output = shell("ps", "-p", "\(pid)", "-o", "rss=").trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let kb = Int(output) else { return 0 }
+        return kb / 1024
+    }
+
+    private func resolveCPU(pid: Int32) -> Double {
+        let output = shell("ps", "-p", "\(pid)", "-o", "%cpu=").trimmingCharacters(in: .whitespacesAndNewlines)
+        return Double(output) ?? 0.0
+    }
+
+    /// Resolve Cursor's active project from its storage.json (since the main process cwd is "/")
+    private func resolveCursorActiveProject() -> String? {
+        let home = NSHomeDirectory()
+        let storagePath = (home as NSString).appendingPathComponent(
+            "Library/Application Support/Cursor/User/globalStorage/storage.json"
+        )
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: storagePath)),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let windowsState = json["windowsState"] as? [String: Any]
+        else { return nil }
+
+        // Try last active window first, then first opened window
+        if let last = windowsState["lastActiveWindow"] as? [String: Any],
+           let folder = last["folder"] as? String {
+            return cursorFolderURI(folder)
+        }
+        if let opened = windowsState["openedWindows"] as? [[String: Any]],
+           let first = opened.first,
+           let folder = first["folder"] as? String {
+            return cursorFolderURI(folder)
+        }
+        return nil
+    }
+
+    private func cursorFolderURI(_ uri: String) -> String? {
+        // Convert "file:///Users/foo/bar" → "/Users/foo/bar"
+        guard uri.hasPrefix("file://") else { return uri }
+        return URL(string: uri)?.path
+    }
+
+    /// Resolve Claude Code session ID from the most recently modified session file
+    private func resolveClaudeSessionId(directory: String) -> String? {
+        guard !directory.isEmpty else { return nil }
+        let home = FileManager.default.homeDirectoryForCurrentUser.path
+        // Claude stores sessions in ~/.claude/projects/{encoded-path}/
+        let encoded = directory.replacingOccurrences(of: "/", with: "-")
+        let projectsDir = "\(home)/.claude/projects/\(encoded)"
+        let fm = FileManager.default
+
+        guard fm.fileExists(atPath: projectsDir),
+              let contents = try? fm.contentsOfDirectory(atPath: projectsDir)
+        else { return nil }
+
+        var newest: (name: String, date: Date)?
+        for file in contents where file.hasSuffix(".jsonl") {
+            let fullPath = "\(projectsDir)/\(file)"
+            guard let attrs = try? fm.attributesOfItem(atPath: fullPath),
+                  let modified = attrs[.modificationDate] as? Date
+            else { continue }
+            if newest == nil || modified > newest!.date {
+                newest = (file, modified)
+            }
+        }
+
+        guard let found = newest?.name else { return nil }
+        // Strip .jsonl extension to get the session UUID
+        return String(found.dropLast(6))
     }
 
     private func resolveGitBranch(directory: String) -> String? {

@@ -46,6 +46,9 @@ struct AIAgent: Identifiable, Equatable {
     let directory: String
     let startTime: Date
     var gitBranch: String?
+    var memoryMB: Int = 0
+    var cpuPercent: Double = 0.0
+    var sessionId: String?
     var childServers: [DevServer] = []
 
     var hasServers: Bool { !childServers.isEmpty }
@@ -69,6 +72,29 @@ struct AIAgent: Identifiable, Equatable {
             return URL(fileURLWithPath: directory).lastPathComponent
         }
         return agentType.displayName
+    }
+
+    var shortenedPath: String? {
+        guard !directory.isEmpty else { return nil }
+        let home = NSHomeDirectory()
+        if directory.hasPrefix(home) {
+            return "~" + directory.dropFirst(home.count)
+        }
+        return directory
+    }
+
+    /// Short session identifier for display (first 8 chars of UUID)
+    var shortSessionId: String? {
+        guard let sid = sessionId else { return nil }
+        return String(sid.prefix(8))
+    }
+
+    /// Whether to show resource stats (memory/CPU) — hide for desktop apps like Cursor/Windsurf
+    var showsResourceStats: Bool {
+        switch agentType {
+        case .cursor, .windsurf: return false
+        default: return true
+        }
     }
 
     var agentIcon: String { agentType.icon }

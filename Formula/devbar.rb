@@ -8,15 +8,17 @@ class Devbar < Formula
   depends_on :macos
 
   def install
-    system "swift", "build", "-c", "release", "--disable-sandbox"
-    bin.install ".build/release/DevBar" => "devbar"
+    system "swift", "build", "-c", "release", "--disable-sandbox",
+           "--build-path", buildpath/".build"
+    binary = buildpath/".build/release/DevBar"
+    bin.install binary => "devbar"
 
     # Build .app bundle for Spotlight / Raycast discovery
     app_dir = prefix/"DevBar.app/Contents"
     (app_dir/"MacOS").mkpath
     (app_dir/"Resources").mkpath
     cp buildpath/"assets/Info.plist", app_dir/"Info.plist"
-    cp ".build/release/DevBar", app_dir/"MacOS/DevBar"
+    cp binary, app_dir/"MacOS/DevBar" if binary.exist?
     cp buildpath/"assets/AppIcon.icns", app_dir/"Resources/AppIcon.icns" if (buildpath/"assets/AppIcon.icns").exist?
   end
 

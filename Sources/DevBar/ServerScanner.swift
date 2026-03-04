@@ -14,6 +14,8 @@ final class ServerScanner {
         "remotemanagem", "screensharind",
         "logd", "syslogd", "coreautha", "loginwindow",
         "stable",  // Cursor internal
+        "com.docker",  // Docker proxy
+        "vpnkit",  // Docker networking
     ]
 
     func scan() -> [DevServer] {

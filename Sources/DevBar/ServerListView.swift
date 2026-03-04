@@ -5,13 +5,17 @@ import AppKit
 final class ServerViewModel: ObservableObject {
     @Published var orphanServers: [DevServer] = []
     @Published var agents: [AIAgent] = []
+    @Published var containers: [DockerContainer] = []
     private let scanner = ServerScanner()
     private let agentScanner = AgentScanner()
+    private let dockerScanner = DockerScanner()
     private let linker = ProcessLinker()
     private var timer: Timer?
 
     var totalCount: Int {
-        orphanServers.count + agents.count + agents.reduce(0) { $0 + $1.childServers.count }
+        orphanServers.count + agents.count + containers.count
+            + agents.reduce(0) { $0 + $1.childServers.count }
+            + containers.reduce(0) { $0 + $1.childServers.count }
     }
 
     func start() {
@@ -31,8 +35,16 @@ final class ServerViewModel: ObservableObject {
             guard let self else { return }
             let serverResults = self.scanner.scan()
             let agentResults = self.agentScanner.scan()
-            let result = self.linker.link(agents: agentResults, servers: serverResults)
+            let dockerResults = self.dockerScanner.scan()
+
+            // Link Docker containers first (claims servers by port)
+            let dockerLink = self.linker.linkDocker(containers: dockerResults, servers: serverResults)
+
+            // Then link agents with remaining servers
+            let result = self.linker.link(agents: agentResults, servers: dockerLink.remainingServers)
+
             DispatchQueue.main.async {
+                self.containers = dockerLink.linkedContainers
                 self.agents = result.linkedAgents
                 self.orphanServers = result.orphanServers
             }
@@ -75,6 +87,35 @@ final class ServerViewModel: ObservableObject {
 
     func openAgentServer(_ server: DevServer) {
         scanner.openInBrowser(port: server.port)
+    }
+
+    func stopContainer(_ container: DockerContainer) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.dockerScanner.stopContainer(id: container.id)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                self?.refresh()
+            }
+        }
+    }
+
+    func openContainer(_ container: DockerContainer) {
+        guard let firstPort = container.ports.first else { return }
+        dockerScanner.openInBrowser(port: firstPort.hostPort)
+    }
+
+    func openContainerPort(_ port: UInt16) {
+        dockerScanner.openInBrowser(port: port)
+    }
+
+    func openContainerServer(_ server: DevServer) {
+        scanner.openInBrowser(port: server.port)
+    }
+
+    func killContainerServer(_ server: DevServer) {
+        scanner.kill(pid: server.id)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.refresh()
+        }
     }
 }
 
@@ -166,7 +207,7 @@ struct ServerListView: View {
                 .padding(.horizontal, 12)
 
             // ── Content ──
-            if viewModel.orphanServers.isEmpty && viewModel.agents.isEmpty {
+            if viewModel.orphanServers.isEmpty && viewModel.agents.isEmpty && viewModel.containers.isEmpty {
                 emptyState
             } else {
                 mainContent
@@ -213,7 +254,7 @@ struct ServerListView: View {
                     .foregroundColor(textTertiary)
             }
             VStack(spacing: 4) {
-                Text("No dev servers or AI agents running")
+                Text("No dev servers, containers, or AI agents running")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(textSecondary)
                 Text("Scanning ports and processes")
@@ -230,6 +271,7 @@ struct ServerListView: View {
     private var mainContent: some View {
         ScrollView {
             VStack(spacing: 4) {
+                // Dev Servers section
                 if !viewModel.orphanServers.isEmpty {
                     sectionHeader("DEV SERVERS", count: viewModel.orphanServers.count)
                     ForEach(viewModel.orphanServers) { server in
@@ -241,12 +283,36 @@ struct ServerListView: View {
                     }
                 }
 
-                if !viewModel.orphanServers.isEmpty && !viewModel.agents.isEmpty {
+                // Divider between dev servers and containers
+                if !viewModel.orphanServers.isEmpty && !viewModel.containers.isEmpty {
                     Rectangle().fill(dividerColor).frame(height: 1)
                         .padding(.horizontal, 4)
                         .padding(.vertical, 4)
                 }
 
+                // Docker Containers section
+                if !viewModel.containers.isEmpty {
+                    sectionHeader("DOCKER CONTAINERS", count: viewModel.containers.count)
+                    ForEach(viewModel.containers) { container in
+                        DockerRowView(
+                            container: container,
+                            onOpen: { viewModel.openContainer(container) },
+                            onStop: { viewModel.stopContainer(container) },
+                            onOpenServer: { viewModel.openContainerServer($0) },
+                            onKillServer: { viewModel.killContainerServer($0) },
+                            onOpenPort: { viewModel.openContainerPort($0) }
+                        )
+                    }
+                }
+
+                // Divider between containers and agents
+                if (!viewModel.orphanServers.isEmpty || !viewModel.containers.isEmpty) && !viewModel.agents.isEmpty {
+                    Rectangle().fill(dividerColor).frame(height: 1)
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 4)
+                }
+
+                // AI Agents section
                 if !viewModel.agents.isEmpty {
                     sectionHeader("AI AGENTS", count: viewModel.agents.count)
                     ForEach(viewModel.agents) { agent in

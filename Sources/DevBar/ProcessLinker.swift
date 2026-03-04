@@ -5,6 +5,11 @@ struct LinkResult {
     var orphanServers: [DevServer]
 }
 
+struct DockerLinkResult {
+    var linkedContainers: [DockerContainer]
+    var remainingServers: [DevServer]
+}
+
 final class ProcessLinker {
     func link(agents: [AIAgent], servers: [DevServer]) -> LinkResult {
         let agentPIDs = Set(agents.map { $0.id })
@@ -66,6 +71,34 @@ final class ProcessLinker {
             }
         }
         return nil
+    }
+
+    /// Link Docker containers to dev servers by matching host port mappings.
+    /// Returns updated containers with nested servers, and remaining unmatched servers.
+    func linkDocker(containers: [DockerContainer], servers: [DevServer]) -> DockerLinkResult {
+        guard !containers.isEmpty else {
+            return DockerLinkResult(linkedContainers: containers, remainingServers: servers)
+        }
+
+        // Build a map of host port → container index
+        var portToContainer: [UInt16: Int] = [:]
+        var containerMap = containers
+        for (idx, container) in containerMap.enumerated() {
+            for portMapping in container.ports {
+                portToContainer[portMapping.hostPort] = idx
+            }
+        }
+
+        var remainingServers: [DevServer] = []
+        for server in servers {
+            if let idx = portToContainer[server.port] {
+                containerMap[idx].childServers.append(server)
+            } else {
+                remainingServers.append(server)
+            }
+        }
+
+        return DockerLinkResult(linkedContainers: containerMap, remainingServers: remainingServers)
     }
 
     private func getParentPID(of pid: Int32) -> Int32 {

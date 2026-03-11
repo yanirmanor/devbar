@@ -2,6 +2,12 @@
 
 A sleek macOS menu bar app that monitors your local dev servers and AI coding agents.
 
+<p align="center">
+  <a href="https://github.com/yanirmanor/devbar/releases/latest/download/DevBar.dmg">
+    <img src="https://img.shields.io/badge/Download_app_for-macOS-black?style=for-the-badge&logo=apple&logoColor=white" alt="Download app for macOS">
+  </a>
+</p>
+
 <img width="340" alt="DevBar Screenshot" src="https://github.com/yanirmanor/devbar/raw/main/assets/screenshot.png">
 
 ## Features
